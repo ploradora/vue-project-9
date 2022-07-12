@@ -1,18 +1,18 @@
 <template>
-  <transition name="item">
-    <div :class="{ darkItem: darkMode, completed: task.complete }" class="item">
-      <button @click="toggleComplete(task)">
-        <img src="../assets/images/icon-check.svg" alt="icon check" />
-      </button>
-      <p class="task">{{ task.task }}</p>
-      <img
-        @click="deleteItem(task)"
-        class="close"
-        src="../assets/images/icon-cross.svg"
-        alt="icon close"
-      />
-    </div>
-  </transition>
+  <div :class="{ darkItem: darkMode, completed: task.complete }" class="item">
+    <button @click="toggleComplete(task)">
+      <img src="../assets/images/icon-check.svg" alt="icon check" />
+    </button>
+    <p class="task">
+      {{ task.task }}
+    </p>
+    <img
+      @click="deleteItem(task)"
+      class="close"
+      src="../assets/images/icon-cross.svg"
+      alt="icon close"
+    />
+  </div>
 </template>
 
 <script>
@@ -34,18 +34,6 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/globalStyles.scss";
-
-.item-enter-active {
-    transition: all .25s ease-in-out;
-}
-.item-enter-from {
-    opacity: 0;
-    transform: scale(.5);
-}
-.item-enter-to {
-    opacity: 1;
-    transform: scale(1);
-}
 
 .item {
   font-size: clamp(14px, 3.5vw, 18px);

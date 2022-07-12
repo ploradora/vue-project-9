@@ -21,7 +21,9 @@
         Completed
       </button>
     </div>
-    <button class="desktop clear-all">Clear Complete</button>
+    <button @click="clearCompleted" class="desktop clear-all">
+      Clear Complete
+    </button>
   </div>
 </template>
 
@@ -32,6 +34,9 @@ export default {
   methods: {
     selectFilter(filter) {
       this.$emit("selectedFilter", filter);
+    },
+    clearCompleted() {
+      this.$emit("clearCompleted");
     },
   },
 };

@@ -3,14 +3,16 @@
     <div class="todo-container">
       <AddTask @darkStatus="darkMode = $event" :darkMode="darkMode" />
       <div v-if="tasks.length" class="list dark-list">
-        <ListTasks
-          v-for="(task, index) in filteredTasks"
-          :key="index"
-          :task="task"
-          :darkMode="darkMode"
-          @delete-item="deleteItem"
-          @toggle-complete="toggleComplete"
-        />
+        <transition-group name="item">
+          <ListTasks
+            v-for="(task, index) in filteredTasks"
+            :key="index"
+            :task="task"
+            :darkMode="darkMode"
+            @delete-item="deleteItem"
+            @toggle-complete="toggleComplete"
+          />
+        </transition-group>
         <div class="mobile-clear">
           <p class="mobile counter">{{ tasks.length }} items left</p>
           <button @click="clearCompleted" class="mobile clear-all">
@@ -65,7 +67,7 @@ export default {
       if (this.current === "completed") {
         return this.tasks.filter((task) => task.complete);
       }
-      if (this.current === "ongoing") {
+      if (this.current === "active") {
         return this.tasks.filter((task) => !task.complete);
       }
       return this.tasks;
@@ -87,12 +89,13 @@ export default {
         });
     },
     clearCompleted() {
-      if (this.current === "ongoing") {
-        projectFirestore.collection("tasksList").onSnapshot((res) => {
-          const changes = res.docChanges();
-          console.log(changes);
+      projectFirestore
+        .collection("tasksList")
+        .where("complete", "==", true)
+        .get()
+        .then((res) => {
+          res.docs.forEach((doc) => doc.ref.delete());
         });
-      }
     },
   },
 };
@@ -122,6 +125,20 @@ section {
       box-shadow: $shadow;
       background-color: #fff;
       z-index: 10;
+      .item-enter-active,
+      .item-leave-active {
+        transition: all 0.25s ease-in-out;
+      }
+      .item-enter-from,
+      .item-leave-to {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      .item-enter-to,
+      .item-leave-from {
+        opacity: 1;
+        transform: scale(1);
+      }
       .mobile-clear {
         padding: $padding-item;
         display: flex;
