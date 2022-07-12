@@ -1,5 +1,12 @@
 <template>
-  <div :class="{ darkItem: darkMode, completed: task.complete }" class="item">
+  <div
+    :class="{
+      darkItem: darkMode,
+      darkCompleted: darkMode && task.complete,
+      completed: task.complete,
+    }"
+    class="item"
+  >
     <button @click="toggleComplete(task)">
       <img src="../assets/images/icon-check.svg" alt="icon check" />
     </button>
@@ -19,7 +26,9 @@
 export default {
   props: ["darkMode", "task"],
   data() {
-    return {};
+    return {
+      drag: false,
+    };
   },
   methods: {
     deleteItem(task) {
@@ -93,6 +102,7 @@ export default {
   }
   .task {
     color: $D-Very-Dark-Grayish-Blue;
+    font-weight: 700;
   }
 }
 </style>

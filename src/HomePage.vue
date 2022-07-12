@@ -5,8 +5,8 @@
       <div v-if="tasks.length" class="list dark-list">
         <transition-group name="item">
           <ListTasks
-            v-for="(task, index) in filteredTasks"
-            :key="index"
+            v-for="task in filteredTasks"
+            :key="task.id"
             :task="task"
             :darkMode="darkMode"
             @delete-item="deleteItem"
@@ -23,12 +23,14 @@
       <FilterButtons
         v-if="tasks.length"
         @selectedFilter="current = $event"
+        @clearCompleted="clearCompleted"
         :current="current"
         :darkMode="darkMode"
         :tasks="tasks"
       />
-      <p class="hint">Drag and Drop to reorder list</p>
+      <!-- <p class="hint">Drag and Drop to reorder list</p> -->
     </div>
+    <TheAttribution />
   </section>
 </template>
 
@@ -36,9 +38,10 @@
 import AddTask from "./components/AddTask.vue";
 import FilterButtons from "./components/FilterButtons.vue";
 import ListTasks from "./components/ListTasks.vue";
+import TheAttribution from "./components/TheAttribution.vue";
 import { projectFirestore } from "./firebase/config";
 export default {
-  components: { AddTask, FilterButtons, ListTasks },
+  components: { AddTask, FilterButtons, ListTasks, TheAttribution },
   data() {
     return {
       darkMode: false,
@@ -125,19 +128,22 @@ section {
       box-shadow: $shadow;
       background-color: #fff;
       z-index: 10;
-      .item-enter-active,
-      .item-leave-active {
+      .item-enter-active {
         transition: all 0.25s ease-in-out;
       }
-      .item-enter-from,
-      .item-leave-to {
+      .item-enter-from {
         opacity: 0;
         transform: scale(0.5);
       }
-      .item-enter-to,
-      .item-leave-from {
+      .item-enter-to {
         opacity: 1;
         transform: scale(1);
+      }
+      .item-leave-from,
+      .item.leave-active,
+      .item-leave-to {
+        transform: unset;
+        opacity: 0;
       }
       .mobile-clear {
         padding: $padding-item;

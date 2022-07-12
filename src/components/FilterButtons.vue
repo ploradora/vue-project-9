@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  emits: ["selectedFilter"],
+  emits: ["selectedFilter", "clearCompleted"],
   props: ["current", "darkMode", "tasks"],
   methods: {
     selectFilter(filter) {

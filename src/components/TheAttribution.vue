@@ -9,6 +9,11 @@
 
 <style scoped lang="scss">
 .attribution {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Times New Roman", Times, serif;
   font-size: 11px;
   text-align: center;
   a {
